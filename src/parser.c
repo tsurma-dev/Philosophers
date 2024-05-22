@@ -6,15 +6,15 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:37:19 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/20 18:38:34 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/05/22 15:18:46 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/philosophers.h"
+#include "../includes/philo.h"
 
 static int	ft_isdigit(char *str);
 
-int	parser(int argc, char **argv, t_philo *philo)
+int	parser(int argc, char **argv, t_house *house)
 {
 	int	i;
 
@@ -28,7 +28,7 @@ int	parser(int argc, char **argv, t_philo *philo)
 		return (EINVAL);
 	i = -1;
 	while (argv[++i])
-		*((int *)(philo) + i) = atoi(argv[i]);
+		*((int *)(house) + i) = atoi(argv[i]);
 	return (0);
 }
 
