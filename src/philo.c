@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tsurma <tsurma@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/22 22:57:05 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/05/23 01:30:46 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,20 +93,10 @@ int	eating(t_philo *tablet)
 {
 	if (tablet->is_dead != 0)
 		return (-1);
-	if (tablet->nmb_thrd % 2)
-	{
-		pthread_mutex_lock(tablet->l_fork);
-		print_message(FORK, tablet);
-		pthread_mutex_lock(tablet->r_fork);
-		print_message(FORK, tablet);
-	}
-	else
-	{
-		pthread_mutex_lock(tablet->r_fork);
-		print_message(FORK, tablet);
-		pthread_mutex_lock(tablet->l_fork);
-		print_message(FORK, tablet);
-	}
+	pthread_mutex_lock(tablet->l_fork);
+	print_message(FORK, tablet);
+	pthread_mutex_lock(tablet->r_fork);
+	print_message(FORK, tablet);
 	print_message(EAT, tablet);
 	reset_meal(tablet);
 	usleep(tablet->rules->tme_eat * 1000);
