@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:55:24 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/22 17:38:41 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/05/22 22:59:23 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ static int	assignments(t_philo *tablet, pthread_mutex_t *forks, t_house *house)
 		tablet[i].l_fork = &forks[i];
 		tablet[i].must_eat = house->tme_must_eat;
 		tablet[i].last_meal = 0;
+		tablet[i].is_dead = 0;
 		if (i < house->nmb_philo)
 			tablet[i].r_fork = &forks[i + 1];
 		else
@@ -71,10 +72,10 @@ int	thread_weaver(t_house *house)
 	if (assignments(tablet, forks, house) != 0)
 		return (1);
 	i = 0;
-	gettimeofday(&house->tv, NULL);
-	house->start = house->tv.tv_sec * 1000 + house->tv.tv_usec / 1000;
+	house->start = gtod();
 	while (++i <= house->nmb_philo)
-		pthread_create(&symposium[i], NULL, &plato, &tablet[i]);
+		pthread_create(&symposium[i], NULL, &socrates, &tablet[i]);
+	house->start = gtod();
 	i = 0;
 	while (++i <= house->nmb_philo)
 		pthread_join(symposium[i], NULL);
