@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/23 01:30:46 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/05/23 10:41:37 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,19 +44,22 @@ void	*socrates(void *clay)
 	tablet = (t_philo *)clay;
 	pthread_create(&cup, NULL, &hemlock, tablet);
 	pthread_detach(cup);
-
 	reset_meal(tablet);
-	while (tablet->is_dead == 0)
+	if (tablet->nmb_thrd % 2 == 0)
+		usleep(200);
+	while (!tablet->is_dead)
 	{
-		if (print_message(THINK, tablet) == -1)
-			break ;
 		if (eating(tablet) == -1)
 			break ;
 		if (--tablet->must_eat == 0)
+		{
 			break ;
+		}
 		if (print_message(SLEEP, tablet) == -1)
 			break ;
 		usleep(tablet->rules->tme_slp * 1000);
+		if (print_message(THINK, tablet) == -1)
+			break ;
 	}
 	return (NULL);
 }
@@ -93,16 +96,21 @@ int	eating(t_philo *tablet)
 {
 	if (tablet->is_dead != 0)
 		return (-1);
-	pthread_mutex_lock(tablet->l_fork);
-	print_message(FORK, tablet);
-	pthread_mutex_lock(tablet->r_fork);
-	print_message(FORK, tablet);
+	takeForkies(tablet);
 	print_message(EAT, tablet);
 	reset_meal(tablet);
 	usleep(tablet->rules->tme_eat * 1000);
 	pthread_mutex_unlock(tablet->l_fork);
 	pthread_mutex_unlock(tablet->r_fork);
 	return (0);
+}
+
+void takeForkies(t_philo *tablet)
+{
+		pthread_mutex_lock(tablet->l_fork);
+		print_message(FORK, tablet);
+		pthread_mutex_lock(tablet->r_fork);
+		print_message(FORK, tablet);
 }
 
 
@@ -144,6 +152,4 @@ void	print_struct(t_house *house)
 	printf("Time to sleep:\t%i\n", house->tme_slp);
 	printf("Must eat:\t%i\n", house->tme_must_eat);
 }
-
-
 

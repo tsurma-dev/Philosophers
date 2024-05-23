@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tsurma <tsurma@student.42berlin.de>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:18:44 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/22 22:58:08 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/05/23 10:35:20 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,13 @@ typedef struct s_philosopher
 }	t_philo;
 
 long long	gtod(void);
-int		thread_weaver(t_house *house);
-void	*socrates(void *house);
-int		parser(int argc, char **argv, t_house *house);
-void	print_struct(t_house *house);
-int		print_message(int mes, t_philo *tablet);
-int		eating(t_philo *tablet);
-void	*hemlock(void *tab);
+int			thread_weaver(t_house *house);
+void		*socrates(void *house);
+int			parser(int argc, char **argv, t_house *house);
+void		print_struct(t_house *house);
+int			print_message(int mes, t_philo *tablet);
+int			eating(t_philo *tablet);
+void		*hemlock(void *tab);
+void 		takeForkies(t_philo *goodboy);
 
 #endif
