@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:37:19 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/22 15:18:46 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 14:21:11 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	parser(int argc, char **argv, t_house *house)
 		return (EINVAL);
 	i = -1;
 	while (argv[++i])
-		*((int *)(house) + i) = atoi(argv[i]);
+		*((int *)(house) + i) = ft_atoi(argv[i]);
 	return (0);
 }
 

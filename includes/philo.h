@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tsurma <tsurma@student.42berlin.de>        +#+  +:+       +#+        */
+/*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:18:44 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/23 10:35:20 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 15:21:19 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
-
 
 # include <stdio.h>
 # include <unistd.h>
@@ -47,6 +46,7 @@ typedef struct s_philosopher
 	pthread_mutex_t	*l_fork;
 	pthread_mutex_t	*r_fork;
 	pthread_mutex_t	*print;
+	pthread_mutex_t	*sip;
 
 	t_house			*rules;
 	long long		last_meal;
@@ -59,10 +59,9 @@ long long	gtod(void);
 int			thread_weaver(t_house *house);
 void		*socrates(void *house);
 int			parser(int argc, char **argv, t_house *house);
-void		print_struct(t_house *house);
 int			print_message(int mes, t_philo *tablet);
 int			eating(t_philo *tablet);
 void		*hemlock(void *tab);
-void 		takeForkies(t_philo *goodboy);
+int			ft_atoi(const char *nptr);
 
 #endif

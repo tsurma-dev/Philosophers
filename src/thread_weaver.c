@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:55:24 by tsurma            #+#    #+#             */
-/*   Updated: 2024/05/22 22:59:23 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 14:44:16 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static int	allocs(pthread_t **s, t_philo **t, pthread_mutex_t **f, t_house *h)
 {
-
 	*s = malloc((h->nmb_philo + 1) * sizeof(pthread_t));
 	if (!*s)
 		return (ENOMEM);
@@ -82,8 +81,8 @@ int	thread_weaver(t_house *house)
 	i = -1;
 	while (++i <= house->nmb_philo)
 		pthread_mutex_destroy(&forks[i]);
-	free(tablet);
 	free(symposium);
 	free(forks);
+	free(tablet);
 	return (0);
 }
