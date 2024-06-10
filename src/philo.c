@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 19:52:06 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 20:02:51 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ void	*socrates(void *clay)
 	tablet = (t_philo *)clay;
 	pthread_create(&cup, NULL, &hemlock, tablet);
 	pthread_detach(cup);
+	pthread_mutex_lock(tablet->sip);
 	tablet->last_meal = gtod();
+	pthread_mutex_unlock(tablet->sip);
 	if (tablet->nmb_thrd % 2 == 0)
 		usleep(200);
 	while (!check_dead(tablet))
@@ -110,8 +112,13 @@ void	*hemlock(void *tab)
 
 static int	check_starve(t_philo *tab)
 {
+	pthread_mutex_lock(tab->sip);
 	if ((gtod() - tab->last_meal) > tab->rules->tme_die)
+	{
+		pthread_mutex_unlock(tab->sip);
 		return (-1);
+	}
+	pthread_mutex_unlock(tab->sip);
 	if (check_dead(tab) != 0 || check_dead_all(tab) != 0)
 		return (1);
 	return (0);
@@ -126,7 +133,9 @@ int	eating(t_philo *tablet)
 	pthread_mutex_lock(tablet->r_fork);
 	print_message(FORK, tablet);
 	print_message(EAT, tablet);
+	pthread_mutex_lock(tablet->sip);
 	tablet->last_meal = gtod();
+	pthread_mutex_unlock(tablet->sip);
 	usleep(tablet->rules->tme_eat * 1000);
 	pthread_mutex_unlock(tablet->l_fork);
 	pthread_mutex_unlock(tablet->r_fork);

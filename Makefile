@@ -6,7 +6,7 @@
 #    By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/11/27 15:40:37 by tsurma            #+#    #+#              #
-#    Updated: 2024/06/10 19:28:34 by tsurma           ###   ########.fr        #
+#    Updated: 2024/06/10 20:03:50 by tsurma           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ SRC =	src/philo.c\
 OBJ = $(SRC:.c=.o)
 
 CC =		cc
-CFLAGS =	-Wall -Werror -Wextra -g3 -fsanitize=thread
+CFLAGS =	-Wall -Werror -Wextra -g3 -fsanitize=address
 MAKEFLAGS =	--no-print-directory
 
 
