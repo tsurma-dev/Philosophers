@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:18:44 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 15:21:19 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 15:48:59 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_houserules
 	int				tme_eat;
 	int				tme_slp;
 	int				tme_must_eat;
+	pthread_mutex_t	*sip_all;
 	long long		start;
 	int				is_dead;
 }	t_house;
@@ -63,5 +64,10 @@ int			print_message(int mes, t_philo *tablet);
 int			eating(t_philo *tablet);
 void		*hemlock(void *tab);
 int			ft_atoi(const char *nptr);
+int			check_dead(t_philo *tab);
+void		set_dead(t_philo *tab, int j);
+int			check_dead_all(t_philo *tab);
+void		set_dead_all(t_philo *tab, int j);
+
 
 #endif
