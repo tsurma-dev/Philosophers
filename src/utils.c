@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:11:48 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 15:45:45 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 19:39:06 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	print_message(int mes, t_philo *tablet)
 		return (-1);
 	}
 	time = gtod() - tablet->rules->start;
-	if (mes == DIED && check_dead(tablet) == -1)
+	if (mes == DIED)
 	{
 		printf("%lli %i has died\n", time, tablet->nmb_thrd);
 		set_dead_all(tablet, 1);

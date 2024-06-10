@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:55:24 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 15:50:35 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 19:42:04 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	thread_weaver(t_house *house)
 	house->start = gtod();
 	while (++i <= house->nmb_philo)
 		pthread_create(&symposium[i], NULL, &socrates, &tablet[i]);
-	house->start = gtod();
+	// house->start = gtod();
 	i = 0;
 	while (++i <= house->nmb_philo)
 		pthread_join(symposium[i], NULL);

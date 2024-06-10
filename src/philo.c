@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 15:51:14 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/10 19:52:06 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,18 +58,18 @@ void	*socrates(void *clay)
 
 void	set_dead(t_philo *tab, int j)
 {
-	pthread_mutex_unlock(tab->sip);
-	tab->is_dead = j;
 	pthread_mutex_lock(tab->sip);
+	tab->is_dead = j;
+	pthread_mutex_unlock(tab->sip);
 }
 
 int	check_dead(t_philo *tab)
 {
 	int	i;
 
-	pthread_mutex_unlock(tab->sip);
-	i = tab->is_dead;
 	pthread_mutex_lock(tab->sip);
+	i = tab->is_dead;
+	pthread_mutex_unlock(tab->sip);
 	return (i);
 }
 
@@ -77,28 +77,33 @@ int	check_dead_all(t_philo *tab)
 {
 	int	i;
 
-	pthread_mutex_unlock(tab->rules->sip_all);
-	i = tab->rules->is_dead;
 	pthread_mutex_lock(tab->rules->sip_all);
+	i = tab->rules->is_dead;
+	pthread_mutex_unlock(tab->rules->sip_all);
 	return (i);
 }
 
 void	set_dead_all(t_philo *tab, int j)
 {
-	pthread_mutex_unlock(tab->rules->sip_all);
-	tab->rules->is_dead = j;
 	pthread_mutex_lock(tab->rules->sip_all);
+	tab->rules->is_dead = j;
+	pthread_mutex_unlock(tab->rules->sip_all);
 }
 
 
 void	*hemlock(void *tab)
 {
 	t_philo	*tablet;
+	int		i;
 
+	i = 0;
 	tablet = (t_philo *)tab;
-	while (check_dead_all(tab) == 0 && check_dead(tablet) == 0)
-		set_dead(tablet, check_starve(tablet));
-	if (check_dead(tablet) == -1)
+	while (check_dead_all(tab) == 0 && i == 0)
+	{
+		i = check_starve(tablet);
+		set_dead(tablet, i);
+	}
+	if (i == -1)
 		print_message(DIED, tablet);
 	return (NULL);
 }
