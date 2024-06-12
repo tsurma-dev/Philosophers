@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:11:48 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/12 14:49:07 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/12 18:30:21 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,16 @@ int	print_message(int mes, t_philo *tablet)
 	long long		time;
 	static int		i;
 
-	if (i == 1)
-		return (-1);
 	pthread_mutex_lock(tablet->print);
+	if (i != 0)
+	{
+		pthread_mutex_unlock(tablet->print);
+		return (-1);
+	}
 	time = gtod() - tablet->rules->start;
 	if (mes == DIED)
 	{
 		printf("%lli %i has died\n", time, tablet->nmb_thrd);
-		tablet->rules->is_dead = 1;
 		i = 1;
 	}
 	else if (mes == THINK)
@@ -47,38 +49,30 @@ int	print_message(int mes, t_philo *tablet)
 	return (0);
 }
 
-int	ft_atoi(const char *nptr)
+void	set_last_meal(t_philo *tablet)
 {
-	int	i;
-	int	m;
-	int	r;
-
-	i = 0;
-	r = 0;
-	m = 0;
-	while (nptr[i] && (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13)))
-		i++;
-	if (nptr[i] == '+' || nptr[i] == '-')
-	{
-		if (nptr[i] == '-')
-			m = 1;
-		i++;
-	}
-	while (nptr[i] >= '0' && nptr[i] <= '9')
-	{
-		r = (r * 10) + (nptr[i] - 48);
-		i++;
-	}
-	if (m == 1)
-		return (-r);
-	return (r);
+	pthread_mutex_lock(tablet->sip);
+	tablet->last_meal = gtod();
+	pthread_mutex_unlock(tablet->sip);
 }
 
-// void	print_struct(t_house *house)
-// {
-// 	printf("Num of Philo:\t%i\n", house->nmb_philo);
-// 	printf("Time to die:\t%i\n", house->tme_die);
-// 	printf("Time to eat:\t%i\n", house->tme_eat);
-// 	printf("Time to sleep:\t%i\n", house->tme_slp);
-// 	printf("Must eat:\t%i\n", house->tme_must_eat);
-// }
+int	eating(t_philo *tablet)
+{
+	int	i;
+
+	pthread_mutex_lock(tablet->mute_death);
+	i = tablet->rules->is_dead;
+	pthread_mutex_unlock(tablet->mute_death);
+	if (i != 0)
+		return (-1);
+	pthread_mutex_lock(tablet->l_fork);
+	print_message(FORK, tablet);
+	pthread_mutex_lock(tablet->r_fork);
+	print_message(FORK, tablet);
+	print_message(EAT, tablet);
+	set_last_meal(tablet);
+	usleep(tablet->rules->tme_eat * 1000);
+	pthread_mutex_unlock(tablet->l_fork);
+	pthread_mutex_unlock(tablet->r_fork);
+	return (0);
+}

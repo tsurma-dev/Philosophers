@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 18:37:19 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 14:21:11 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/12 18:18:36 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,31 @@ static int	ft_isdigit(char *str)
 	if (str[i] == '\0' && i > 0)
 		return (0);
 	return (1);
+}
+
+int	ft_atoi(const char *nptr)
+{
+	int	i;
+	int	m;
+	int	r;
+
+	i = 0;
+	r = 0;
+	m = 0;
+	while (nptr[i] && (nptr[i] == 32 || (nptr[i] >= 9 && nptr[i] <= 13)))
+		i++;
+	if (nptr[i] == '+' || nptr[i] == '-')
+	{
+		if (nptr[i] == '-')
+			m = 1;
+		i++;
+	}
+	while (nptr[i] >= '0' && nptr[i] <= '9')
+	{
+		r = (r * 10) + (nptr[i] - 48);
+		i++;
+	}
+	if (m == 1)
+		return (-r);
+	return (r);
 }

@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/12 14:59:12 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/12 18:36:26 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,38 +34,63 @@ void	*socrates(void *clay)
 
 	tablet = (t_philo *)clay;
 	pthread_create(&cup, NULL, &hemlock, tablet);
-	pthread_detach(cup);
-	tablet->last_meal = gtod();
+	set_last_meal(tablet);
 	if (tablet->nmb_thrd % 2 == 0)
 		usleep(200);
-	while (1)
+	while (tablet->rules->nmb_philo > 1)
 	{
 		if (eating(tablet) == -1)
-			return (NULL);
-		if (--tablet->must_eat == 0)
-			return (NULL);
+			break ;
+		if (count_meals(tablet, 1) == -1)
+			break ;
 		if (print_message(SLEEP, tablet) == -1)
-			return (NULL);
+			break ;
 		usleep(tablet->rules->tme_slp * 1000);
 		if (print_message(THINK, tablet) == -1)
-			return (NULL);
+			break ;
 	}
+	pthread_join(cup, NULL);
 	return (NULL);
+}
+
+int	count_meals(t_philo *tablet, int i)
+{
+	if (tablet->rules->tme_must_eat == -1)
+		return (0);
+	pthread_mutex_lock(tablet->mute_fig);
+	tablet->must_eat -= i;
+	if (tablet->must_eat == 0)
+	{
+		pthread_mutex_unlock(tablet->mute_fig);
+		return (-1);
+	}
+	pthread_mutex_unlock(tablet->mute_fig);
+	return (0);
 }
 
 void	*hemlock(void *tab)
 {
 	t_philo	*tablet;
+	int		i;
 
+	i = 0;
 	tablet = (t_philo *)tab;
-	while (tablet->rules->is_dead == 0)
+	while (1)
 	{
+		pthread_mutex_lock(tablet->mute_death);
+		i = tablet->rules->is_dead;
+		pthread_mutex_unlock(tablet->mute_death);
+		if (i != 0)
+			break ;
 		if (check_starve(tablet) == -1)
 		{
 			print_message(DIED, tablet);
+			pthread_mutex_lock(tablet->mute_death);
+			tablet->rules->is_dead = 1;
+			pthread_mutex_unlock(tablet->mute_death);
 			break ;
 		}
-		if (tablet->must_eat == 0)
+		if (count_meals(tablet, 0) == -1)
 			break ;
 	}
 	return (NULL);
@@ -73,23 +98,12 @@ void	*hemlock(void *tab)
 
 static int	check_starve(t_philo *tab)
 {
-	if ((gtod() - tab->last_meal) > tab->rules->tme_die)
-		return (-1);
-	return (0);
-}
+	long long	i;
 
-int	eating(t_philo *tablet)
-{
-	if (tablet->rules->is_dead != 0)
+	pthread_mutex_lock(tab->sip);
+	i = gtod() - tab->last_meal;
+	pthread_mutex_unlock(tab->sip);
+	if (i > tab->rules->tme_die)
 		return (-1);
-	pthread_mutex_lock(tablet->l_fork);
-	print_message(FORK, tablet);
-	pthread_mutex_lock(tablet->r_fork);
-	print_message(FORK, tablet);
-	print_message(EAT, tablet);
-	tablet->last_meal = gtod();
-	usleep(tablet->rules->tme_eat * 1000);
-	pthread_mutex_unlock(tablet->l_fork);
-	pthread_mutex_unlock(tablet->r_fork);
 	return (0);
 }
