@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:11:48 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 14:25:22 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:49:07 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,17 @@ long long	gtod(void)
 int	print_message(int mes, t_philo *tablet)
 {
 	long long		time;
+	static int		i;
 
-	pthread_mutex_lock(tablet->print);
-	if (tablet->rules->is_dead == 1)
-	{
-		pthread_mutex_unlock(tablet->print);
+	if (i == 1)
 		return (-1);
-	}
+	pthread_mutex_lock(tablet->print);
 	time = gtod() - tablet->rules->start;
-	if (mes == DIED && tablet->is_dead == -1)
+	if (mes == DIED)
 	{
 		printf("%lli %i has died\n", time, tablet->nmb_thrd);
 		tablet->rules->is_dead = 1;
+		i = 1;
 	}
 	else if (mes == THINK)
 		printf("%lli %i is thinking\n", time, tablet->nmb_thrd);

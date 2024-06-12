@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/22 16:55:24 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/10 14:44:16 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/12 14:40:24 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	allocs(pthread_t **s, t_philo **t, pthread_mutex_t **f, t_house *h)
 		free(*s);
 		return (ENOMEM);
 	}
-	*f = malloc((h->nmb_philo + 1) * sizeof(pthread_mutex_t));
+	*f = malloc((h->nmb_philo * 2 + 1) * sizeof(pthread_mutex_t));
 	if (!*f)
 	{
 		free(*s);
@@ -38,7 +38,7 @@ static int	assignments(t_philo *tablet, pthread_mutex_t *forks, t_house *house)
 	int	i;
 
 	i = -1;
-	while (++i <= house->nmb_philo)
+	while (++i <= house->nmb_philo * 2)
 		if (pthread_mutex_init(&forks[i], NULL) != 0)
 			return (1);
 	i = 0;
@@ -50,7 +50,7 @@ static int	assignments(t_philo *tablet, pthread_mutex_t *forks, t_house *house)
 		tablet[i].l_fork = &forks[i];
 		tablet[i].must_eat = house->tme_must_eat;
 		tablet[i].last_meal = 0;
-		tablet[i].is_dead = 0;
+		tablet[i].sip = &forks[i * 2];
 		if (i < house->nmb_philo)
 			tablet[i].r_fork = &forks[i + 1];
 		else
