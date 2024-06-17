@@ -6,12 +6,13 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:11:48 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/17 15:10:13 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/17 17:06:31 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
 
+static void	take_forks(t_philo *tablet);
 
 long long	gtod(void)
 {
@@ -66,14 +67,29 @@ int	eating(t_philo *tablet)
 	pthread_mutex_unlock(tablet->mute_death);
 	if (i != 0)
 		return (-1);
-	pthread_mutex_lock(tablet->l_fork);
-	print_message(FORK, tablet);
-	pthread_mutex_lock(tablet->r_fork);
-	print_message(FORK, tablet);
+	take_forks(tablet);
 	print_message(EAT, tablet);
 	set_last_meal(tablet);
 	usleep(tablet->rules->tme_eat * 1000);
 	pthread_mutex_unlock(tablet->l_fork);
 	pthread_mutex_unlock(tablet->r_fork);
 	return (0);
+}
+
+static void	take_forks(t_philo *tablet)
+{
+	if (tablet->nmb_thrd % 2 == 0)
+	{
+		pthread_mutex_lock(tablet->l_fork);
+		print_message(FORK, tablet);
+		pthread_mutex_lock(tablet->r_fork);
+		print_message(FORK, tablet);
+	}
+	else
+	{
+		pthread_mutex_lock(tablet->r_fork);
+		print_message(FORK, tablet);
+		pthread_mutex_lock(tablet->l_fork);
+		print_message(FORK, tablet);
+	}
 }

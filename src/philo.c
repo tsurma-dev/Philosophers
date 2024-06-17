@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 15:52:47 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/17 14:45:24 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/17 17:04:16 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	*socrates(void *clay)
 	pthread_mutex_lock(tablet->mute_thread);
 	pthread_create(&cup, NULL, &hemlock, tablet);
 	pthread_mutex_unlock(tablet->mute_thread);
+	usleep(tablet->rules->nmb_philo * 300 - tablet->nmb_thrd * 300);
 	set_last_meal(tablet);
 	while (tablet->rules->nmb_philo > 1)
 	{
@@ -104,7 +105,7 @@ static int	check_starve(t_philo *tab)
 	pthread_mutex_lock(tab->sip);
 	i = gtod() - tab->last_meal;
 	pthread_mutex_unlock(tab->sip);
-	if (i > tab->rules->tme_die)
+	if (i - 1 > tab->rules->tme_die)
 		return (-1);
 	return (0);
 }
