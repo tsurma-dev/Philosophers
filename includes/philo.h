@@ -6,7 +6,7 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/20 16:18:44 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/12 18:39:02 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/17 14:34:41 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_philosopher
 	pthread_mutex_t	*sip;
 	pthread_mutex_t	*mute_death;
 	pthread_mutex_t	*mute_fig;
+	pthread_mutex_t	*mute_thread;
 
 	t_house			*rules;
 	long long		last_meal;

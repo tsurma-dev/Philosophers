@@ -6,11 +6,12 @@
 /*   By: tsurma <tsurma@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 14:11:48 by tsurma            #+#    #+#             */
-/*   Updated: 2024/06/12 18:30:21 by tsurma           ###   ########.fr       */
+/*   Updated: 2024/06/17 15:10:13 by tsurma           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philo.h"
+
 
 long long	gtod(void)
 {
